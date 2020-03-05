@@ -6,14 +6,25 @@ import json
 import yaml
 import logging.config
 
-with open('log_conf.yml', 'r') as f:
-    log_config = yaml.safe_load(f.read())
-    logging.config.dictConfig(log_config)
+try:
+    with open('config/log_conf.yml', 'r') as f:
+        log_config = yaml.safe_load(f.read())
+        logging.config.dictConfig(log_config)
+except OSError as e:
+    print("Log config file not found. Using default log config file.")
+    with open('log_conf.yml', 'r') as f:
+        log_config = yaml.safe_load(f.read())
+        logging.config.dictConfig(log_config)
 
 logger = logging.getLogger('basicLogger')
 
-with open('app_conf.yml', 'r') as f:
-    app_config = yaml.safe_load(f.read())
+try:
+    with open('config/app_conf.yml', 'r') as f:
+        app_config = yaml.safe_load(f.read())
+except OSError as e:
+    logger.info("Config file not found. Using default config file.")
+    with open('app_conf.yml', 'r') as f:
+        app_config = yaml.safe_load(f.read())
 
 
 def get_nth_goal_scored(position):
